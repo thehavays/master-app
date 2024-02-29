@@ -1,0 +1,4 @@
+<resources>
+
+    <style name="Theme.MasterApp" parent="Theme.AppCompat.DayNight.NoActionBar" />
+</resources>
