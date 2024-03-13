@@ -1,4 +1,4 @@
-package com.vestel.tv.masterapp.ui.mainmenu
+package com.vestel.tv.factory.ui.mainmenu
 
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
@@ -9,27 +9,28 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.vestel.tv.masterapp.ui.composable.MenuHeader
-import com.vestel.tv.masterapp.ui.theme.AlertDialogExample
-import com.vestel.tv.masterapp.ui.theme.MenuRow
-import com.vestel.tv.middleware.VestelFactoryCommandManager
+import com.vestel.tv.factory.ui.composable.MenuHeader
+import com.vestel.tv.factory.ui.theme.AlertDialogExample
+import com.vestel.tv.factory.ui.theme.MenuRow
+import com.vestel.tv.factory.util.Constants
+import com.vestel.tv.factory.util.NavDestinations
 import kotlin.system.exitProcess
 
 @Composable
 fun MainMenuActivity(
-    navController: NavController,
-    menuItems: List<String>
+    navController: NavController
 ) {
-
     Column {
         MenuHeader("Factory Menu")
-        FactoryMenuList(menuItems, navController)
+        FactoryMenuList(navController)
     }
     BackHandler {
         navController.popBackStack()
@@ -37,12 +38,12 @@ fun MainMenuActivity(
 }
 
 @Composable
-fun FactoryMenuList(greetings: List<String>, navController: NavController) {
-    val showDialog = remember { mutableStateOf(false) }
-    if (showDialog.value) AlertDialogExample(
-        onDismissRequest = { showDialog.value = false },
+fun FactoryMenuList(navController: NavController) {
+    var showDialog by remember { mutableStateOf(false) }
+    if (showDialog) AlertDialogExample(
+        onDismissRequest = { showDialog = false },
         onConfirmation = {
-            VestelFactoryCommandManager.performFactoryReset()
+            //TODO:
         },
         dialogTitle = "Are you sure?",
         dialogText = "All data will be deleted. Are you sure to reset device?",
@@ -51,15 +52,11 @@ fun FactoryMenuList(greetings: List<String>, navController: NavController) {
 
     val context = LocalContext.current
     LazyColumn(modifier = Modifier.padding(vertical = 4.dp)) {
-        items(items = greetings) { name ->
+        items(items = Constants.MAIN_MENU_ITEMS) { name ->
             MenuRow(name = name) {
                 when (name) {
                     "Device Info" -> {
-                        navController.navigate("DEVICE_INFO")
-                    }
-
-                    "Diagnostic" -> {
-                        navController.navigate("DIAGNOSTIC")
+                        navController.navigate(NavDestinations.DEVICE_INFO)
                     }
 
                     "Factory Exit" -> {
@@ -67,7 +64,7 @@ fun FactoryMenuList(greetings: List<String>, navController: NavController) {
                     }
 
                     "Factory Reset" -> {
-                        showDialog.value = true
+                        showDialog = true
                     }
 
                     else -> {

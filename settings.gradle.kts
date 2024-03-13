@@ -14,6 +14,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Master App"
-include(":app")
-include(":libraries:middleware")
 include(":factory")

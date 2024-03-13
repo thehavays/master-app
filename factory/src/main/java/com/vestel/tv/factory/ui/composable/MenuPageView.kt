@@ -1,4 +1,4 @@
-package com.vestel.tv.masterapp.ui.composable
+package com.vestel.tv.factory.ui.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
